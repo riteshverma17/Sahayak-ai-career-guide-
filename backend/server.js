@@ -6,9 +6,17 @@ const helmet = require('helmet');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const authRoutes = require('./routes/auth');
+const assessmentRoutes = require('./routes/assessment');
+const adminRoutes = require('./routes/admin');
+const chatRoutes = require('./routes/chat');
 
 const app = express();
-app.use(helmet());
+// Configure helmet with a relaxed Cross-Origin-Opener-Policy for local development so
+// third-party scripts that use postMessage (Google Identity Services) are not blocked.
+// In production you should review and tighten these headers.
+app.use(helmet({
+  crossOriginOpenerPolicy: false
+}));
 app.use(cors());
 app.use(express.json());
 
@@ -18,6 +26,9 @@ app.use(limiter);
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/assessment', assessmentRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Example protected route
 // const auth = require('./middleware/auth');

@@ -1,6 +1,7 @@
 // src/pages/Login.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import GoogleSignIn from '../components/GoogleSignIn';
 
 export default function Login({ setToken }) {
   const navigate = useNavigate();
@@ -38,20 +39,16 @@ export default function Login({ setToken }) {
       // Save token + user info
       localStorage.setItem("token", data.token);
       localStorage.setItem("userName", data.user.name || data.user.email.split("@")[0]);
+      localStorage.setItem("userEmail", data.user.email);
+      if (data.user.createdAt) localStorage.setItem('userCreatedAt', data.user.createdAt);
       setLoading(false);
       setToken?.(data.token);
       window.dispatchEvent(new Event('tokenUpdated'));
       navigate("/dashboard");
     } catch (err) {
-      // Fallback: Accept login for demo purposes
-      console.warn("Backend login failed, using demo mode:", err.message);
-      const token = "demo-token-" + Date.now();
-      localStorage.setItem("token", token);
-      localStorage.setItem("userName", email.split("@")[0]);
+      console.error("Login error:", err.message);
+      setError(err.message || "Login failed. Please check your credentials.");
       setLoading(false);
-      setToken?.(token);
-      window.dispatchEvent(new Event('tokenUpdated'));
-      navigate("/dashboard");
     }
   };
 
@@ -139,7 +136,7 @@ export default function Login({ setToken }) {
                 <input type="checkbox" className="w-4 h-4" />
                 <span className="text-gray-600">Remember me</span>
               </label>
-              <Link to="/forgot" className="text-indigo-600 hover:underline">Forgot?</Link>
+              <Link to="/forgot-password" className="text-indigo-600 hover:underline">Forgot?</Link>
             </div>
 
             <button
@@ -150,6 +147,10 @@ export default function Login({ setToken }) {
               {loading ? "Signing in..." : "Login"}
             </button>
           </form>
+
+          <div className="mt-4">
+            <GoogleSignIn setToken={setToken} />
+          </div>
 
           <div className="mt-6 text-center text-sm text-gray-600">
             Don't have an account?{" "}

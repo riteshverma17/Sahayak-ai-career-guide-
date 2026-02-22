@@ -1,50 +1,71 @@
-import React from 'react';
-import { HiOutlineBell } from 'react-icons/hi';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { HiOutlineBell, HiOutlineLogout, HiOutlineChevronDown, HiOutlineUser } from 'react-icons/hi';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function Topbar(){
   const navigate = useNavigate();
-  const userName = localStorage.getItem('userName') || 'User';
-  const userInitials = userName.split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
+  const storedName = localStorage.getItem('userName') || 'User';
+  const [userName, setUserName] = useState(storedName);
+  const userInitials = (userName || 'User').split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      if (token) {
+        await fetch('/api/auth/logout', { method: 'POST', headers: { Authorization: `Bearer ${token}` } });
+      }
+    } catch (e) {
+      // ignore
+    }
     localStorage.removeItem('token');
     localStorage.removeItem('userName');
-    // Notify app to refresh auth state
     try { window.dispatchEvent(new Event('tokenUpdated')); } catch (e) {}
     navigate('/');
   };
 
+  useEffect(() => {
+    const onDoc = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener('click', onDoc);
+    return () => document.removeEventListener('click', onDoc);
+  }, []);
+
   return (
-    <header className="w-full bg-white border-b p-3 md:p-4 flex items-center justify-between">
+    <header className="sticky top-0 z-40 w-full bg-linear-to-r from-gray-900 via-indigo-900 to-black text-white shadow-md p-3 md:p-4 flex items-center justify-between">
       <div className="flex items-center gap-4">
-        <h2 className="text-lg text-blue-600 font-semibold md:hidden">Sahayak</h2>
-        <div className="relative">
-          <input placeholder="Search courses, colleges, careers..." className="pl-3 pr-10 py-2 w-64 md:w-96 rounded-md border focus:ring-1 focus:ring-indigo-500" />
-          <button className="absolute right-1 top-1/2 -translate-y-1/2 p-2">
-            🔎
-          </button>
+        <div className="hidden md:flex items-center gap-3">
+          
         </div>
       </div>
 
       <div className="flex items-center gap-4">
-        <button title="Notifications" className="p-2 rounded-md hover:bg-gray-100">
-          <HiOutlineBell size={20} />
-        </button>
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-indigo-500 text-white flex items-center justify-center font-semibold">
-            {userInitials}
-          </div>
-          <div className="hidden md:block">
-            <div className="text-sm font-medium">{userName}</div>
-            <div className="text-xs text-gray-500">Student</div>
-          </div>
-          <button
-            onClick={handleLogout}
-            className="ml-4 px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600 transition"
-          >
-            Logout
+        
+
+        <div className="relative" ref={ref}>
+          <button onClick={() => setOpen(o => !o)} className="flex items-center gap-3 p-2 rounded-md hover:bg-white/6 transition">
+            <div className="w-10 h-10 rounded-full bg-linear-to-br from-indigo-500 to-pink-500 text-white flex items-center justify-center font-semibold shadow-lg">{userInitials}</div>
+            <div className="hidden md:block text-left">
+              <div className="text-sm font-medium text-gray-100">{userName}</div>
+              <div className="text-xs text-gray-300">Student</div>
+            </div>
+            <HiOutlineChevronDown className="text-gray-300" />
           </button>
+
+          {open && (
+            <div className="absolute right-0 mt-2 w-56 bg-linear-to-b from-gray-800 to-gray-900 border border-gray-700 rounded-lg shadow-2xl z-50 overflow-hidden">
+              <Link to="/profile" onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 border-b border-gray-700">
+                <HiOutlineUser size={18} className="text-indigo-400" />
+                <span className="text-sm font-medium text-gray-100">Profile</span>
+              </Link>
+              <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 text-rose-400 hover:bg-rose-600/10">
+                <HiOutlineLogout size={18} className="text-rose-400" />
+                <span className="text-sm font-medium">Logout</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </header>

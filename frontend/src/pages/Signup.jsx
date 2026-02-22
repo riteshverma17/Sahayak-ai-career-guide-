@@ -2,6 +2,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+// When using OTP signup, we call /api/auth/signup-init and then navigate to verification page
+import GoogleSignIn from '../components/GoogleSignIn';
+
 export default function Signup({ setToken }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -67,28 +70,26 @@ export default function Signup({ setToken }) {
 
     setLoading(true);
     try {
-      const res = await fetch('/api/auth/signup', {
+      // Start OTP signup flow: send OTP to email and save temp token on server
+      const res = await fetch('/api/auth/signup-init', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        // userType is set to 'student' by default (no UI choice)
         body: JSON.stringify({
           name: formData.name.trim(),
           email: formData.email.trim().toLowerCase(),
-          password: formData.password,
-          userType: 'student'
+          password: formData.password
         })
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Signup failed');
+      if (!res.ok) throw new Error(data.message || 'Signup init failed');
 
-      // Redirect user to login after successful signup
+      // Navigate to OTP verification page where user can enter the code
       setLoading(false);
-      navigate('/login');
+      navigate(`/verify-signup?email=${encodeURIComponent(formData.email.trim().toLowerCase())}`);
     } catch (err) {
-      // Backend failed; still redirect to login (no OTP flow)
-      console.warn("Backend signup failed:", err.message);
+      console.error('Signup init error:', err);
+      setError(err.message || 'Failed to start signup');
       setLoading(false);
-      navigate('/login');
     }
   };
 
@@ -222,6 +223,10 @@ export default function Signup({ setToken }) {
               {loading ? 'Creating account...' : 'Create account'}
             </button>
           </form>
+
+          <div className="mt-4">
+            <GoogleSignIn setToken={setToken} />
+          </div>
 
           <div className="mt-5 text-center text-sm text-gray-600">
             Already have an account? <Link to="/login" className="text-pink-600 font-semibold">Login</Link>
