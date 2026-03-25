@@ -24,6 +24,11 @@ app.use(express.json());
 const limiter = rateLimit({ windowMs: 60 * 1000, max: 100 }); // 100 requests per min
 app.use(limiter);
 
+app.get("/",(req,res)=>{
+  res.send("OK")
+})
+
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/assessment', assessmentRoutes);
