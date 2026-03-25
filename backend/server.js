@@ -17,7 +17,9 @@ const app = express();
 app.use(helmet({
   crossOriginOpenerPolicy: false
 }));
+
 app.use(cors());
+
 app.use(express.json());
 
 // Rate limiter (adjust limits as needed)
