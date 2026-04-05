@@ -13,7 +13,7 @@ import Attempt from './pages/Attempt';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import CollegeDirectory from './pages/CollegeDirectory';
-import Resources from './pages/Resources';
+import CareerPathways from './pages/CareerPathways';
 import Sidebar from './components/Sidebar';
 import Topbar from './components/Topbar';
 import ChatBot from './components/Chatbot';
@@ -69,7 +69,7 @@ export default function App(){
           element={
             token ? (
               <>
-                <div className="h-dvh w-full flex bg-gray-100 overflow-hidden">
+                <div className="h-[100dvh] w-full flex bg-gray-100 overflow-hidden">
                   <Sidebar />
                   <div className="flex-1 flex flex-col min-w-0">
                     <Topbar />
@@ -90,7 +90,7 @@ export default function App(){
           element={
             token ? (
               <>
-                <div className="h-dvh w-full flex bg-gray-100 overflow-hidden">
+                <div className="h-[100dvh] w-full flex bg-gray-100 overflow-hidden">
                   <Sidebar />
                   <div className="flex-1 flex flex-col min-w-0">
                     <Topbar />
@@ -111,7 +111,7 @@ export default function App(){
           element={
             token ? (
               <>
-                <div className="h-dvh w-full flex bg-gray-100 overflow-hidden">
+                <div className="h-[100dvh] w-full flex bg-gray-100 overflow-hidden">
                   <Sidebar />
                   <div className="flex-1 flex flex-col min-w-0">
                     <Topbar />
@@ -132,7 +132,7 @@ export default function App(){
           element={
             token ? (
               <>
-                <div className="h-dvh w-full flex bg-gray-100 overflow-hidden">
+                <div className="h-[100dvh] w-full flex bg-gray-100 overflow-hidden">
                   <Sidebar />
                   <div className="flex-1 flex flex-col min-w-0">
                     <Topbar />
@@ -153,7 +153,7 @@ export default function App(){
           element={
             token ? (
               <>
-                <div className="h-dvh w-full flex bg-gray-100 overflow-hidden">
+                <div className="h-[100dvh] w-full flex bg-gray-100 overflow-hidden">
                   <Sidebar />
                   <div className="flex-1 flex flex-col min-w-0">
                     <Topbar />
@@ -170,16 +170,16 @@ export default function App(){
         />
 
         <Route 
-          path="/resources"
+          path="/career-pathways"
           element={
             token ? (
               <>
-                <div className="h-dvh w-full flex bg-gray-100 overflow-hidden">
+                <div className="h-[100dvh] w-full flex bg-gray-100 overflow-hidden">
                   <Sidebar />
                   <div className="flex-1 flex flex-col min-w-0">
                     <Topbar />
                     <main className="flex-1 overflow-y-auto p-4 md:p-6 relative">
-                      <Resources />
+                      <CareerPathways />
                     </main>
                   </div>
                 </div>
