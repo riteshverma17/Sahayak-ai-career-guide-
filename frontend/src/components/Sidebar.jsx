@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { HiOutlineHome, HiOutlineBookOpen, HiOutlineSparkles, HiOutlineUser, HiOutlineLogout } from 'react-icons/hi';
+import { HiOutlineHome, HiOutlineBookOpen, HiOutlineSparkles, HiOutlineUser, HiOutlineLibrary, HiOutlineTrendingUp, HiOutlineLogout } from 'react-icons/hi';
 
 export default function Sidebar() {
   const location = useLocation();
@@ -25,8 +25,9 @@ export default function Sidebar() {
 
   const menuItems = [
     { label: 'Dashboard', icon: HiOutlineHome, path: '/dashboard' },
-    { label: 'Assigments', icon: HiOutlineBookOpen, path: '/assessment' },
-    { label: 'Careers', icon: HiOutlineSparkles, path: '/careers' },
+    { label: 'Assignments', icon: HiOutlineBookOpen, path: '/assessment' },
+    { label: 'Resources', icon: HiOutlineSparkles, path: '/resources' },
+    { label: 'Colleges', icon: HiOutlineLibrary, path: '/college-directory' },
     { label: 'Profile', icon: HiOutlineUser, path: '/profile' },
   ];
 
@@ -47,7 +48,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="sticky top-0 hidden md:flex flex-col w-72 h-screen bg-linear-to-br from-gray-900 to-indigo-950 text-white p-5 overflow-y-auto shadow-lg">
+    <aside className="shrink-0 sticky top-0 hidden md:flex flex-col w-72 h-screen bg-linear-to-br from-gray-900 to-indigo-950 text-white p-5 overflow-y-auto shadow-lg">
       <div className="mb-8 flex items-center gap-3">
         <div className="w-11 h-11 rounded-lg bg-linear-to-tr from-indigo-600 to-pink-500 flex items-center justify-center text-white font-bold text-lg shadow">S</div>
         <div>

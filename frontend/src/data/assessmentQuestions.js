@@ -163,6 +163,47 @@ export const questionBanks = {
         options: ['she asked where are you going', 'She asked, "Where are you going?"', 'She asked where are you going?', 'she asked. where are you going'],
         correctAnswer: 1,
         explanation: 'The correct punctuation includes the comma before the quote and proper quotation marks.'
+      },
+      // Science Questions - 10th class
+      {
+        id: 21,
+        type: 'science',
+        question: 'Which of the following is a non-renewable resource?',
+        options: ['Solar energy', 'Wind energy', 'Coal', 'Biomass'],
+        correctAnswer: 2,
+        explanation: 'Coal is a fossil fuel formed over millions of years and cannot be regenerated on human timescales. Solar, wind, and biomass are renewable resources.'
+      },
+      {
+        id: 22,
+        type: 'science',
+        question: 'What is the pH of a neutral solution at 25°C?',
+        options: ['0', '7', '14', '3.5'],
+        correctAnswer: 1,
+        explanation: 'A neutral solution has a pH of 7. Values below 7 are acidic, and values above 7 are basic.'
+      },
+      {
+        id: 23,
+        type: 'science',
+        question: 'Which process do plants use to produce their own food?',
+        options: ['Respiration', 'Photosynthesis', 'Fermentation', 'Decomposition'],
+        correctAnswer: 1,
+        explanation: 'Photosynthesis is the process by which plants convert light energy, water, and carbon dioxide into glucose (food) and oxygen.'
+      },
+      {
+        id: 24,
+        type: 'science',
+        question: 'What is the SI unit of force?',
+        options: ['Kilogram', 'Newton', 'Joule', 'Watt'],
+        correctAnswer: 1,
+        explanation: 'Newton (N) is the SI unit of force. 1 Newton = 1 kg·m/s²'
+      },
+      {
+        id: 25,
+        type: 'science',
+        question: 'The human skeleton has approximately how many bones in an adult?',
+        options: ['186', '206', '256', '306'],
+        correctAnswer: 1,
+        explanation: 'An adult human skeleton typically has 206 bones. At birth, babies have approximately 270 bones, many of which are made of cartilage.'
       }
     ]
   },
@@ -329,6 +370,88 @@ export const questionBanks = {
         options: ['is', 'are', 'was', 'have been'],
         correctAnswer: 0,
         explanation: '"Team" is a collective noun and can be treated as singular (is) or plural (are) depending on context. Here, singular form is preferred.'
+      },
+      // Chemistry Questions - 12th class
+      {
+        id: 21,
+        type: 'chemistry',
+        question: 'What is the number of electrons in an oxygen atom (atomic number 8)?',
+        options: ['6', '8', '10', '16'],
+        correctAnswer: 1,
+        explanation: 'An oxygen atom has an atomic number of 8, which means it has 8 protons and 8 electrons in its neutral state.'
+      },
+      {
+        id: 22,
+        type: 'chemistry',
+        question: 'Which of the following is the weakest type of chemical bond?',
+        options: ['Ionic bond', 'Covalent bond', 'Hydrogen bond', 'Metallic bond'],
+        correctAnswer: 2,
+        explanation: 'Hydrogen bonds are the weakest type of chemical bond. They typically have bond energies between 4-20 kJ/mol, compared to covalent bonds (100-500 kJ/mol) and ionic bonds (500-4000 kJ/mol).'
+      },
+      {
+        id: 23,
+        type: 'chemistry',
+        question: 'What is the molar mass of sodium chloride (NaCl)? (Na=23, Cl=35.5)',
+        options: ['46.5 g/mol', '58.5 g/mol', '70.5 g/mol', '117 g/mol'],
+        correctAnswer: 1,
+        explanation: 'Molar mass of NaCl = 23 + 35.5 = 58.5 g/mol'
+      },
+      {
+        id: 24,
+        type: 'chemistry',
+        question: 'At what temperature does water normally boil at 1 atm pressure?',
+        options: ['90°C', '100°C', '110°C', '120°C'],
+        correctAnswer: 1,
+        explanation: 'Water boils at 100°C at normal atmospheric pressure (1 atm or 101.325 kPa).'
+      },
+      {
+        id: 25,
+        type: 'chemistry',
+        question: 'Which process involves the absorption of heat energy?',
+        options: ['Exothermic', 'Endothermic', 'Isothermal', 'Adiabatic'],
+        correctAnswer: 1,
+        explanation: 'Endothermic processes absorb heat energy from the surroundings. Exothermic processes release heat energy.'
+      },
+      // Physics Questions - 12th class
+      {
+        id: 26,
+        type: 'physics',
+        question: 'What is the SI unit of electric current?',
+        options: ['Volt', 'Ampere', 'Ohm', 'Watt'],
+        correctAnswer: 1,
+        explanation: 'The ampere (A) is the SI unit of electric current, named after André-Marie Ampère.'
+      },
+      {
+        id: 27,
+        type: 'physics',
+        question: 'According to Newton\'s second law, F = ma. If the force is doubled and mass is halved, what happens to acceleration?',
+        options: ['Remains same', 'Doubles', 'Quadruples', 'Halves'],
+        correctAnswer: 2,
+        explanation: 'F = ma, so a = F/m. If F is doubled (2F) and m is halved (m/2), then a = 2F/(m/2) = 4F/m, so acceleration quadruples.'
+      },
+      {
+        id: 28,
+        type: 'physics',
+        question: 'What is the speed of light in vacuum?',
+        options: ['2.5 × 10⁸ m/s', '3 × 10⁸ m/s', '3.5 × 10⁸ m/s', '4 × 10⁸ m/s'],
+        correctAnswer: 1,
+        explanation: 'The speed of light in vacuum is approximately 3 × 10⁸ m/s or 300,000 km/s, denoted by the constant c.'
+      },
+      {
+        id: 29,
+        type: 'physics',
+        question: 'Which of the following is NOT a fundamental force of nature?',
+        options: ['Gravitational force', 'Magnetic force', 'Strong nuclear force', 'Weak nuclear force'],
+        correctAnswer: 1,
+        explanation: 'Magnetic force is not a fundamental force. The four fundamental forces are: gravitational, electromagnetic (which includes magnetic force), strong nuclear, and weak nuclear forces.'
+      },
+      {
+        id: 30,
+        type: 'physics',
+        question: 'What is the relationship between frequency and wavelength of a wave?',
+        options: ['Frequency = Wavelength', 'Frequency × Wavelength = Speed of wave', 'Frequency = Speed of wave / Wavelength', 'Frequency + Wavelength = Constant'],
+        correctAnswer: 2,
+        explanation: 'The wave equation is v = f × λ, where v is speed, f is frequency, and λ is wavelength. Therefore, f = v/λ'
       }
     ]
   }

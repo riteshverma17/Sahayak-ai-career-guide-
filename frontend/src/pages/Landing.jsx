@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 export default function Landing() {
   const [openFaq, setOpenFaq] = useState(null);
   const faqs = [
-    { q: 'How does Sahayak recommend careers?', a: 'We combine a short aptitude test, your interests, and real-world college/career data to suggest personalized pathways.' },
+    { q: 'How does Sahayak recommend resources?', a: 'We provide curated free educational resources depending on the class you are in or the competitive exam you are preparing for.' },
     { q: 'Is Sahayak free?', a: 'Core features like college discovery and the quick assessment are free. Premium features (mentoring, mock interviews) will be optional.' },
     { q: 'How accurate are recommendations?', a: 'Recommendations are a guidance tool — best used with your own research and counseling for final decisions.' }
   ];

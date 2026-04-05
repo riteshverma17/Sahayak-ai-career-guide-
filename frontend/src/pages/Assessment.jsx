@@ -4,7 +4,7 @@ import { Bar, Pie, Line } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import { questionBanks } from '../data/assessmentQuestions';
 
-const QUIZ_TIME_LIMIT = 30 * 60; // 30 minutes in seconds
+const QUIZ_TIME_LIMIT = 50 * 60; // 50 minutes in seconds
 
 export default function Assessment() {
   const navigate = useNavigate();
@@ -16,9 +16,11 @@ export default function Assessment() {
   const [questions, setQuestions] = useState([]);
   const [timeRemaining, setTimeRemaining] = useState(QUIZ_TIME_LIMIT);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showFullscreenWarning, setShowFullscreenWarning] = useState(false);
   const quizContainerRef = useRef(null);
   const timerIntervalRef = useRef(null);
   const [attempts, setAttempts] = useState([]);
+  const [warnings, setWarnings] = useState(0);
 
   const classOptions = ['10th', '12th'];
 
@@ -73,6 +75,76 @@ export default function Assessment() {
     fetchAttempts();
   }, []);
 
+  // Anti-cheat mechanisms
+  useEffect(() => {
+    if (step !== 'quiz') return;
+
+    const handleFullscreenChange = () => {
+      // If user exits fullscreen
+      if (!document.fullscreenElement) {
+        setIsFullscreen(false);
+        setWarnings(prev => {
+          const newWarnings = prev + 1;
+          if (newWarnings >= 3) {
+            alert('Warning 3/3: You have exited fullscreen 3 times. The test will now automatically submit.');
+            handleAutoSubmit(); // Forces score submission
+          } else {
+            // Set state to show a specific UI to re-trigger fullscreen on click
+            setShowFullscreenWarning(true);
+          }
+          return newWarnings;
+        });
+      } else {
+        setIsFullscreen(true);
+        setShowFullscreenWarning(false);
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        setWarnings(prev => {
+          const newWarnings = prev + 1;
+          if (newWarnings >= 3) {
+            alert('Warning 3/3: You have switched tabs/windows 3 times. The test will now automatically submit.');
+            handleAutoSubmit();
+          } else {
+            if (!document.fullscreenElement) {
+              setShowFullscreenWarning(true);
+            }
+          }
+          return newWarnings;
+        });
+      }
+    };
+
+    const blockCopyPaste = (e) => {
+      e.preventDefault();
+      alert('Copying, cutting, or pasting is strictly prohibited during the test.');
+    };
+
+    const blockContextMenu = (e) => {
+      e.preventDefault();
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener('copy', blockCopyPaste);
+    document.addEventListener('paste', blockCopyPaste);
+    document.addEventListener('cut', blockCopyPaste);
+    document.addEventListener('contextmenu', blockContextMenu);
+    
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      document.removeEventListener('copy', blockCopyPaste);
+      document.removeEventListener('paste', blockCopyPaste);
+      document.removeEventListener('cut', blockCopyPaste);
+      document.removeEventListener('contextmenu', blockContextMenu);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
+
+
   const handleAutoSubmit = () => {
     if (step === 'quiz') {
       handleSubmitQuiz();
@@ -91,8 +163,13 @@ export default function Assessment() {
 
   const handleClassSelect = (cls) => {
     // Prepare questions and show instructions before starting
+    const allQuestions = questionBanks[cls].questions;
+    // Shuffle and pick up to 30 questions randomly
+    const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
+    const selectedQuestions = shuffled.slice(0, 30);
+    
     setSelectedClass(cls);
-    setQuestions(questionBanks[cls].questions);
+    setQuestions(selectedQuestions);
     setCurrentQuestionIndex(0);
     setAnswers({});
     setTimeRemaining(QUIZ_TIME_LIMIT);
@@ -137,7 +214,10 @@ export default function Assessment() {
     let correct = 0;
     let wrong = 0;
     const wrongAnswerDetails = [];
-    const categoryScores = { aptitude: { correct: 0, total: 0 }, english: { correct: 0, total: 0 } };
+    const categoryScores = {};
+    questions.forEach(q => {
+      if (!categoryScores[q.type]) categoryScores[q.type] = { correct: 0, total: 0 };
+    });
 
     questions.forEach((question, index) => {
       const userAnswer = answers[index];
@@ -248,7 +328,7 @@ export default function Assessment() {
             >
               ← Back
             </button>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">Aptitude & English Assessment</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">Sahayak Assessment</h1>
             <p className="text-gray-600">Select your class to begin the test</p>
           </div>
 
@@ -262,7 +342,11 @@ export default function Assessment() {
                   className="p-8 rounded-2xl border-2 border-indigo-200 hover:border-indigo-600 hover:bg-indigo-50 transition text-center"
                 >
                   <div className="text-4xl font-bold text-indigo-600 mb-2">{cls}</div>
-                  <p className="text-gray-600">20 Questions (Aptitude & English)</p>
+                  {cls === '10th' ? (
+                    <p className="text-gray-600">30 Questions (Aptitude, English, Science)</p>
+                  ) : (
+                    <p className="text-gray-600">30 Questions (Aptitude, English, Chemistry, Physics)</p>
+                  )}
                 </button>
               ))}
             </div>
@@ -319,9 +403,11 @@ export default function Assessment() {
           <div className="bg-white rounded-2xl shadow-lg p-8">
             <ul className="list-disc list-inside text-gray-700 space-y-3 mb-6">
               <li>Total duration: <strong>30 minutes</strong>.</li>
-              <li>The test contains <strong>20 multiple-choice</strong> questions (Aptitude & English).</li>
+              <li>The test contains <strong>30 multiple-choice</strong> questions (based on your class selection).</li>
               <li>Once you click <strong>Start Test</strong>, the test will enter fullscreen mode.</li>
               <li>The timer will begin immediately and auto-submit when time runs out.</li>
+              <li className="text-red-600">⚠️ <strong>Anti-Cheat Active:</strong> Exiting fullscreen or switching tabs will trigger a warning. After 3 warnings, the test is automatically submitted.</li>
+              <li className="text-red-600">🚫 Copying, pasting, and right-clicking are strictly prohibited!</li>
               <li>You can navigate between questions and submit anytime before the time ends.</li>
             </ul>
 
@@ -352,6 +438,31 @@ export default function Assessment() {
         ref={quizContainerRef}
         className={`${isFullscreen ? 'fixed inset-0 z-50' : ''} min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900`}
       >
+        {showFullscreenWarning && (
+          <div className="fixed inset-0 z-[100] bg-black/95 flex flex-col items-center justify-center p-6 text-center">
+            <div className="bg-white rounded-2xl p-8 max-w-md w-full animate-pulse shadow-[0_0_50px_rgba(239,68,68,0.5)]">
+              <h2 className="text-3xl font-bold text-red-600 mb-4">⚠️ Warning</h2>
+              <p className="text-gray-800 text-lg mb-6">
+                You must remain in fullscreen mode and stay on the current tab to take the test.
+                <br /><br />
+                <b>Test will auto-submit after 3 warnings.</b> Current warnings: {warnings}/3.
+              </p>
+              <button
+                onClick={() => {
+                  if(quizContainerRef.current && typeof quizContainerRef.current.requestFullscreen === 'function'){
+                    quizContainerRef.current.requestFullscreen().then(() => {
+                      setShowFullscreenWarning(false);
+                      setIsFullscreen(true);
+                    }).catch(console.error);
+                  }
+                }}
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-xl text-lg transition-transform hover:scale-105 active:scale-95"
+              >
+                Resume Test in Fullscreen
+              </button>
+            </div>
+          </div>
+        )}
         <div className={`${isFullscreen ? 'h-screen overflow-y-auto' : ''}`}>
           {/* Professional Header */}
           <div className="bg-gradient-to-r from-indigo-700 via-purple-700 to-indigo-700 text-white sticky top-0 z-40 shadow-2xl">
@@ -439,11 +550,21 @@ export default function Assessment() {
                   {/* Type Badge */}
                   <div className="mb-6">
                     <span className={`inline-block px-4 py-2 rounded-full text-sm font-bold ${
-                      currentQuestion.type === 'aptitude' 
-                        ? 'bg-blue-100 text-blue-700' 
-                        : 'bg-green-100 text-green-700'
+                      {
+                        aptitude: 'bg-blue-100 text-blue-700',
+                        english: 'bg-green-100 text-green-700',
+                        science: 'bg-purple-100 text-purple-700',
+                        chemistry: 'bg-yellow-100 text-yellow-700',
+                        physics: 'bg-red-100 text-red-700'
+                      }[currentQuestion.type] || 'bg-gray-100 text-gray-700'
                     }`}>
-                      {currentQuestion.type === 'aptitude' ? '🧮 Aptitude' : '📖 English'}
+                      {{
+                        aptitude: '🧮 Aptitude',
+                        english: '📖 English',
+                        science: '🔬 Science',
+                        chemistry: '🧪 Chemistry',
+                        physics: '⚛️ Physics'
+                      }[currentQuestion.type] || currentQuestion.type}
                     </span>
                   </div>
 
@@ -560,16 +681,22 @@ export default function Assessment() {
 
   // === RENDER: Results ===
   if (step === 'results' && results) {
-    const aptitudePercentage = (results.categoryScores.aptitude.correct / results.categoryScores.aptitude.total) * 100;
-    const englishPercentage = (results.categoryScores.english.correct / results.categoryScores.english.total) * 100;
+    const categories = Object.keys(results.categoryScores);
+    const categoryLabels = categories.map(c => c.charAt(0).toUpperCase() + c.slice(1));
+    const correctData = categories.map(c => results.categoryScores[c].correct);
+    const percentages = categories.map(c => {
+      const score = results.categoryScores[c];
+      return ((score.correct / score.total) * 100 || 0).toFixed(1);
+    });
+    const colors = ['#3b82f6', '#10b981', '#8b5cf6', '#eab308', '#ef4444'].slice(0, categories.length);
 
     // Chart Data
     const categoryChartData = {
-      labels: ['Aptitude', 'English'],
+      labels: categoryLabels,
       datasets: [{
         label: 'Correct Answers',
-        data: [results.categoryScores.aptitude.correct, results.categoryScores.english.correct],
-        backgroundColor: ['#3b82f6', '#10b981'],
+        data: correctData,
+        backgroundColor: colors,
         borderRadius: 8
       }]
     };
@@ -584,12 +711,12 @@ export default function Assessment() {
     };
 
     const categoryPercentageChartData = {
-      labels: ['Aptitude', 'English'],
+      labels: categoryLabels,
       datasets: [{
         label: 'Percentage',
-        data: [aptitudePercentage.toFixed(1), englishPercentage.toFixed(1)],
-        borderColor: ['#3b82f6', '#10b981'],
-        backgroundColor: ['#3b82f6', '#10b981'],
+        data: percentages,
+        borderColor: colors,
+        backgroundColor: colors,
         borderWidth: 2,
         pointRadius: 6,
         fill: true,
@@ -675,39 +802,41 @@ export default function Assessment() {
           <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Category Breakdown</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Aptitude */}
-              <div className="border-2 border-blue-200 rounded-xl p-6 bg-blue-50">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-blue-900">🧮 Aptitude</h3>
-                  <span className="text-2xl font-bold text-blue-600">{aptitudePercentage.toFixed(1)}%</span>
-                </div>
-                <div className="text-sm text-blue-700 mb-3">
-                  {results.categoryScores.aptitude.correct} / {results.categoryScores.aptitude.total} correct
-                </div>
-                <div className="w-full bg-blue-200 rounded-full h-3">
-                  <div
-                    className="bg-blue-600 h-3 rounded-full transition"
-                    style={{ width: `${aptitudePercentage}%` }}
-                  />
-                </div>
-              </div>
+              {categories.map((cat, idx) => {
+                const score = results.categoryScores[cat];
+                const pct = percentages[idx];
+                const color = ['blue', 'green', 'purple', 'yellow', 'red'][idx % 5];
+                const bgColors = {
+                  blue: 'bg-blue-50 border-blue-200', green: 'bg-green-50 border-green-200', 
+                  purple: 'bg-purple-50 border-purple-200', yellow: 'bg-yellow-50 border-yellow-200',
+                  red: 'bg-red-50 border-red-200'
+                };
+                const textColors = { blue: 'text-blue-900', green: 'text-green-900', purple: 'text-purple-900', yellow: 'text-yellow-900', red: 'text-red-900' };
+                const pctColors = { blue: 'text-blue-600', green: 'text-green-600', purple: 'text-purple-600', yellow: 'text-yellow-600', red: 'text-red-600' };
+                const barBg = { blue: 'bg-blue-600', green: 'bg-green-600', purple: 'bg-purple-600', yellow: 'bg-yellow-600', red: 'bg-red-600' };
+                const trackBg = { blue: 'bg-blue-200', green: 'bg-green-200', purple: 'bg-purple-200', yellow: 'bg-yellow-200', red: 'bg-red-200' };
+                
+                const emoji = { aptitude: '🧮', english: '📖', science: '🔬', chemistry: '🧪', physics: '⚛️' }[cat] || '📋';
+                const label = categoryLabels[idx];
 
-              {/* English */}
-              <div className="border-2 border-green-200 rounded-xl p-6 bg-green-50">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-green-900">📖 English</h3>
-                  <span className="text-2xl font-bold text-green-600">{englishPercentage.toFixed(1)}%</span>
-                </div>
-                <div className="text-sm text-green-700 mb-3">
-                  {results.categoryScores.english.correct} / {results.categoryScores.english.total} correct
-                </div>
-                <div className="w-full bg-green-200 rounded-full h-3">
-                  <div
-                    className="bg-green-600 h-3 rounded-full transition"
-                    style={{ width: `${englishPercentage}%` }}
-                  />
-                </div>
-              </div>
+                return (
+                  <div key={cat} className={`border-2 rounded-xl p-6 ${bgColors[color]}`}>
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className={`text-lg font-bold ${textColors[color]}`}>{emoji} {label}</h3>
+                      <span className={`text-2xl font-bold ${pctColors[color]}`}>{pct}%</span>
+                    </div>
+                    <div className={`text-sm mb-3 ${textColors[color].replace('900', '700')}`}>
+                      {score.correct} / {score.total} correct
+                    </div>
+                    <div className={`w-full rounded-full h-3 ${trackBg[color]}`}>
+                      <div
+                        className={`h-3 rounded-full transition ${barBg[color]}`}
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 

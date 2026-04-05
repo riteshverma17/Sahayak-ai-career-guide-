@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
+const mongoSanitize = require('express-mongo-sanitize');
+const hpp = require('hpp');
 const authRoutes = require('./routes/auth');
 const assessmentRoutes = require('./routes/assessment');
 const adminRoutes = require('./routes/admin');
@@ -20,10 +22,16 @@ app.use(helmet({
 
 app.use(cors());
 
-app.use(express.json());
+// Data sanitization against NoSQL query injection
+app.use(mongoSanitize());
+
+app.use(express.json({ limit: '10kb' })); // Limit body payload to 10kb
+
+// Prevent HTTP Param Pollution
+app.use(hpp());
 
 // Rate limiter (adjust limits as needed)
-const limiter = rateLimit({ windowMs: 60 * 1000, max: 100 }); // 100 requests per min
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100, message: 'Too many requests from this IP, please try again in 15 minutes!' }); // 100 requests per 15 min
 app.use(limiter);
 
 app.get("/",(req,res)=>{
@@ -43,8 +51,9 @@ app.use('/api/chat', chatRoutes);
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/sahayak';
+console.log(MONGO_URI);
 
-mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(MONGO_URI)
   .then(() => {
     console.log('MongoDB connected');
     app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));

@@ -12,12 +12,11 @@ import Assessment from './pages/Assessment';
 import Attempt from './pages/Attempt';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import CollegeDirectory from './pages/CollegeDirectory';
+import Resources from './pages/Resources';
 import Sidebar from './components/Sidebar';
 import Topbar from './components/Topbar';
 import ChatBot from './components/Chatbot';
-
-
-
 // Protected route component
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem('token');
@@ -70,16 +69,15 @@ export default function App(){
           element={
             token ? (
               <>
-                <div className="min-h-screen flex bg-gray-100">
+                <div className="h-[100dvh] w-full flex bg-gray-100 overflow-hidden">
                   <Sidebar />
-                  <div className="flex-1 flex flex-col">
+                  <div className="flex-1 flex flex-col min-w-0">
                     <Topbar />
-                    <main className="flex-1 overflow-y-auto p-4 md:p-6">
+                    <main className="flex-1 overflow-y-auto p-4 md:p-6 relative">
                       <Dashboard />
                     </main>
                   </div>
                 </div>
-                <ChatBot />
               </>
             ) : (
               <Navigate to="/login" replace />
@@ -92,16 +90,15 @@ export default function App(){
           element={
             token ? (
               <>
-                <div className="min-h-screen flex bg-gray-100">
+                <div className="h-[100dvh] w-full flex bg-gray-100 overflow-hidden">
                   <Sidebar />
-                  <div className="flex-1 flex flex-col">
+                  <div className="flex-1 flex flex-col min-w-0">
                     <Topbar />
-                    <main className="flex-1 overflow-y-auto p-4 md:p-6">
+                    <main className="flex-1 overflow-y-auto p-4 md:p-6 relative">
                       <Profile />
                     </main>
                   </div>
                 </div>
-                <ChatBot />
               </>
             ) : (
               <Navigate to="/login" replace />
@@ -114,16 +111,15 @@ export default function App(){
           element={
             token ? (
               <>
-                <div className="min-h-screen flex bg-gray-100">
+                <div className="h-[100dvh] w-full flex bg-gray-100 overflow-hidden">
                   <Sidebar />
-                  <div className="flex-1 flex flex-col">
+                  <div className="flex-1 flex flex-col min-w-0">
                     <Topbar />
-                    <main className="flex-1 overflow-y-auto p-4 md:p-6">
+                    <main className="flex-1 overflow-y-auto p-4 md:p-6 relative">
                       <Assessment />
                     </main>
                   </div>
                 </div>
-                <ChatBot />
               </>
             ) : (
               <Navigate to="/login" replace />
@@ -136,16 +132,57 @@ export default function App(){
           element={
             token ? (
               <>
-                <div className="min-h-screen flex bg-gray-100">
+                <div className="h-[100dvh] w-full flex bg-gray-100 overflow-hidden">
                   <Sidebar />
-                  <div className="flex-1 flex flex-col">
+                  <div className="flex-1 flex flex-col min-w-0">
                     <Topbar />
-                    <main className="flex-1 overflow-y-auto p-4 md:p-6">
+                    <main className="flex-1 overflow-y-auto p-4 md:p-6 relative">
                       <Attempt />
                     </main>
                   </div>
                 </div>
-                <ChatBot />
+              </>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        
+        <Route 
+          path="/college-directory"
+          element={
+            token ? (
+              <>
+                <div className="h-[100dvh] w-full flex bg-gray-100 overflow-hidden">
+                  <Sidebar />
+                  <div className="flex-1 flex flex-col min-w-0">
+                    <Topbar />
+                    <main className="flex-1 overflow-y-auto p-4 md:p-6 relative">
+                      <CollegeDirectory />
+                    </main>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+
+        <Route 
+          path="/resources"
+          element={
+            token ? (
+              <>
+                <div className="h-[100dvh] w-full flex bg-gray-100 overflow-hidden">
+                  <Sidebar />
+                  <div className="flex-1 flex flex-col min-w-0">
+                    <Topbar />
+                    <main className="flex-1 overflow-y-auto p-4 md:p-6 relative">
+                      <Resources />
+                    </main>
+                  </div>
+                </div>
               </>
             ) : (
               <Navigate to="/login" replace />

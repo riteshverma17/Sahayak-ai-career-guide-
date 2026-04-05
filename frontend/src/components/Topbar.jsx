@@ -34,7 +34,7 @@ export default function Topbar(){
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-linear-to-r from-gray-900 via-indigo-900 to-black text-white shadow-md p-3 md:p-4 flex items-center justify-between">
+    <header className="shrink-0 sticky top-0 z-40 w-full bg-linear-to-r from-gray-900 via-indigo-900 to-black text-white shadow-md p-3 md:p-4 flex items-center justify-between">
       <div className="flex items-center gap-4">
         <div className="hidden md:flex items-center gap-3">
           
