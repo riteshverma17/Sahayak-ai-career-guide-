@@ -13,7 +13,8 @@ import Attempt from './pages/Attempt';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import CollegeDirectory from './pages/CollegeDirectory';
-import CareerPathways from './pages/CareerPathways';
+import Resources from './pages/Resources';
+
 import Sidebar from './components/Sidebar';
 import Topbar from './components/Topbar';
 import ChatBot from './components/Chatbot';
@@ -170,7 +171,7 @@ export default function App(){
         />
 
         <Route 
-          path="/career-pathways"
+          path="/resources"
           element={
             token ? (
               <>
@@ -179,7 +180,7 @@ export default function App(){
                   <div className="flex-1 flex flex-col min-w-0">
                     <Topbar />
                     <main className="flex-1 overflow-y-auto p-4 md:p-6 relative">
-                      <CareerPathways />
+                      <Resources />
                     </main>
                   </div>
                 </div>

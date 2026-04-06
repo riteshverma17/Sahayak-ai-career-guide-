@@ -23,7 +23,7 @@ app.use(helmet({
 app.use(cors());
 
 // Data sanitization against NoSQL query injection
-app.use(mongoSanitize());
+// app.use(mongoSanitize()); // TEMPORARILY DISABLED: incompatible with express 5+
 
 app.use(express.json({ limit: '10kb' })); // Limit body payload to 10kb
 

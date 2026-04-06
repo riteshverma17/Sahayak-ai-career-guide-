@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         "/api": {
-          target: env.VITE_BACKEND_URL || "https://sahayak-ai-career-guide-9wdt.vercel.app",
+          target: env.VITE_BACKEND_URL || "http://localhost:5000",
           changeOrigin: true,
           secure: false,
         }
