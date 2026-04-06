@@ -1,0 +1,82 @@
+[
+  {
+    "keywords": ["courses", "available courses", "what can I study"],
+    "answer": "We offer information on a wide range of courses including Engineering, Medical, Management, Arts, and more. You can explore them in the Courses section."
+  },
+  {
+    "keywords": ["engineering", "btech", "technical courses"],
+    "answer": "Engineering offers multiple branches like Computer Science, Mechanical, Civil, and Electrical. You can explore colleges and eligibility criteria in our directory."
+  },
+  {
+    "keywords": ["medical", "mbbs", "doctor"],
+    "answer": "If you're interested in the medical field, you can explore courses like MBBS, BDS, and Nursing. We also provide details on entrance exams like NEET."
+  },
+  {
+    "keywords": ["management", "mba", "business"],
+    "answer": "Management courses like BBA and MBA are great for business careers. You can find top colleges and admission details in our platform."
+  },
+  {
+    "keywords": ["top colleges", "best colleges", "ranking"],
+    "answer": "You can check top-ranked colleges based on various parameters like placement, infrastructure, and faculty in our College Directory."
+  },
+  {
+    "keywords": ["fees", "college fees", "cost"],
+    "answer": "College fees vary based on the institution and course. You can view detailed fee structures in each college's profile."
+  },
+  {
+    "keywords": ["scholarship", "financial aid"],
+    "answer": "Many colleges offer scholarships based on merit or need. You can find scholarship details in the college information section."
+  },
+  {
+    "keywords": ["entrance exam", "jee", "neet", "exam"],
+    "answer": "Popular entrance exams include JEE for engineering and NEET for medical courses. We provide guidance and details about these exams."
+  },
+  {
+    "keywords": ["eligibility", "criteria", "requirements"],
+    "answer": "Eligibility criteria vary depending on the course and college. You can check detailed requirements in each course or college section."
+  },
+  {
+    "keywords": ["placement", "jobs", "career opportunities"],
+    "answer": "Many colleges provide placement opportunities. You can check placement statistics and top recruiters in the college profiles."
+  },
+  {
+    "keywords": ["internship", "training"],
+    "answer": "Internships are important for gaining practical experience. Many colleges offer internship support and industry exposure."
+  },
+  {
+    "keywords": ["login", "signin", "access account"],
+    "answer": "You can log in using your registered email and password. If you don't have an account, you can sign up easily."
+  },
+  {
+    "keywords": ["signup", "register", "create account"],
+    "answer": "To create an account, click on the Sign Up button and fill in your details. It’s quick and easy!"
+  },
+  {
+    "keywords": ["forgot password", "reset password"],
+    "answer": "Click on 'Forgot Password' on the login page and follow the instructions to reset your password."
+  },
+  {
+    "keywords": ["contact", "support team", "help desk"],
+    "answer": "You can reach out to our support team through the Contact Us page for any assistance."
+  },
+  {
+    "keywords": ["recommend", "suggest career", "what should I do"],
+    "answer": "You can take our career assessment test to get personalized career recommendations based on your interests and skills."
+  },
+  {
+    "keywords": ["skills", "improve skills", "development"],
+    "answer": "We provide guidance on skill development based on your chosen career path, including technical and soft skills."
+  },
+  {
+    "keywords": ["dashboard", "my data"],
+    "answer": "Your dashboard shows your activity, assessment results, and recommended colleges and courses."
+  },
+  {
+    "keywords": ["update profile", "edit details"],
+    "answer": "You can update your personal details anytime from the Profile section."
+  },
+  {
+    "keywords": ["thank you", "thanks"],
+    "answer": "You're welcome! I'm here to help you anytime 😊"
+  }
+]

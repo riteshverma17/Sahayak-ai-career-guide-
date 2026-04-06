@@ -55,7 +55,6 @@ export default function App(){
             adminToken ? (
               <>
                 <AdminDashboard />
-                <ChatBot />
               </>
             ) : (
               <Navigate to="/admin-login" replace />
@@ -199,6 +198,7 @@ export default function App(){
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
       </Routes>
+      <ChatBot />
     </BrowserRouter>
   );
 }

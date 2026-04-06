@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,10 +24,14 @@ export default function ChatBot() {
 
     // Add user message
     const userMessage = {
-      id: messages.length + 1,
+      id: Date.now(),
       text: inputValue,
       sender: 'user'
     };
+    
+    // Prepare history payload for AI (exclude the initial greeting if desired, but here we'll send it)
+    const historyPayload = messages.map(msg => ({ sender: msg.sender, text: msg.text }));
+    
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setLoading(true);
@@ -38,21 +43,21 @@ export default function ChatBot() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token') || localStorage.getItem('adminToken')}`
         },
-        body: JSON.stringify({ message: inputValue })
+        body: JSON.stringify({ message: inputValue, history: historyPayload })
       });
 
       const data = await response.json();
       
       if (data.success) {
         const botMessage = {
-          id: messages.length + 2,
+          id: Date.now() + 1,
           text: data.reply,
           sender: 'bot'
         };
         setMessages(prev => [...prev, botMessage]);
       } else {
         const errorMessage = {
-          id: messages.length + 2,
+          id: Date.now() + 1,
           text: 'Sorry, I encountered an issue. Please try again.',
           sender: 'bot'
         };
@@ -61,7 +66,7 @@ export default function ChatBot() {
     } catch (error) {
       console.error('Chat error:', error);
       const errorMessage = {
-        id: messages.length + 2,
+        id: Date.now() + 1,
         text: 'Sorry, I\'m having trouble connecting. Please check your connection.',
         sender: 'bot'
       };
@@ -95,7 +100,7 @@ export default function ChatBot() {
               <div className="flex items-center gap-2">
                 <span className="text-2xl">🤖</span>
                 <div>
-                  <h3 className="font-bold text-lg">Sahayak Assistant</h3>
+                  <h3 className="font-bold text-lg">Sahayak AI</h3>
                   <p className="text-sm text-indigo-100">Always here to help</p>
                 </div>
               </div>
@@ -115,13 +120,19 @@ export default function ChatBot() {
                   className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-xs px-4 py-3 rounded-xl ${
+                    className={`max-w-[85%] px-4 py-3 rounded-xl ${
                       msg.sender === 'user'
                         ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-br-none'
                         : 'bg-gray-200 text-gray-900 rounded-bl-none'
                     }`}
                   >
-                    <p className="text-sm leading-relaxed">{msg.text}</p>
+                    {msg.sender === 'bot' ? (
+                      <div className="text-sm leading-relaxed prose prose-sm max-w-none">
+                        <ReactMarkdown>{msg.text}</ReactMarkdown>
+                      </div>
+                    ) : (
+                      <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                    )}
                   </div>
                 </div>
               ))}
@@ -154,7 +165,7 @@ export default function ChatBot() {
                     type="text"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="Type a message..."
+                    placeholder="Ask me anything..."
                     disabled={loading}
                     className="flex-1 border border-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm"
                   />
@@ -195,6 +206,13 @@ export default function ChatBot() {
             transform: translateY(0);
           }
         }
+        /* Custom styles for ReactMarkdown */
+        .prose ul { list-style-type: disc; padding-left: 1.25rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .prose ol { list-style-type: decimal; padding-left: 1.25rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .prose p { margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .prose p:first-child { margin-top: 0; }
+        .prose p:last-child { margin-bottom: 0; }
+        .prose strong { font-weight: 600; color: unset; }
       `}</style>
     </>
   );
