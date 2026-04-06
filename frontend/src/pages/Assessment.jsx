@@ -19,14 +19,6 @@ export default function Assessment() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showFullscreenWarning, setShowFullscreenWarning] = useState(false);
   const quizContainerRef = useRef(null);
-
-  return (
-    <div className="min-h-screen bg-gray-50 flex flex-col p-4 md:p-8">
-      <SEO 
-        title="Career Assessment & Aptitude Test - Sahayak"
-        description="Take the Sahayak Career Assessment test. Discover your strengths, analyze your aptitude, and get personalized recommendations for your academic journey."
-        url="https://sahayak.live/assessment"
-      />
   const timerIntervalRef = useRef(null);
   const [attempts, setAttempts] = useState([]);
   const [warnings, setWarnings] = useState(0);
@@ -329,6 +321,11 @@ export default function Assessment() {
   if (step === 'classSelection') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6">
+        <SEO 
+          title="Career Assessment & Aptitude Test - Sahayak"
+          description="Take the Sahayak Career Assessment test. Discover your strengths, analyze your aptitude, and get personalized recommendations for your academic journey."
+          url="https://sahayak.live/assessment"
+        />
         <div className="max-w-2xl mx-auto">
           <div className="mb-8">
             <button

@@ -18,16 +18,6 @@ export default function CollegeDirectory() {
       const matchesName = Boolean(c.name && c.name.toLowerCase().includes(term));
       const matchesLocation = Boolean(c.location && c.location.toLowerCase().includes(term));
       const matchesProgram = Boolean(c.programs && c.programs.some(p => p.toLowerCase().includes(term)));
-    });
-  }, [searchTerm, selectedCategory, selectedType]);
-
-  return (
-    <div className="min-h-screen bg-gray-50 flex flex-col p-4 md:p-8">
-      <SEO 
-        title="College Directory & Rankings Toolkit - Sahayak"
-        description="Search through India's top Engineering, Medical, Management, and Arts universities. View placement data, fees structures, and reviews on Sahayak."
-        url="https://sahayak.live/college-directory"
-      />
 
       const textMatch = matchesName || matchesLocation || matchesProgram;       
 
@@ -59,6 +49,11 @@ export default function CollegeDirectory() {
 
   return (
     <div className="p-6">
+      <SEO 
+        title="College Directory & Rankings Toolkit - Sahayak"
+        description="Search through India's top Engineering, Medical, Management, and Arts universities. View placement data, fees structures, and reviews on Sahayak."
+        url="https://sahayak.live/college-directory"
+      />
       <h1 className="text-3xl font-bold text-gray-900 mb-6">Top Colleges Directory</h1>
       <p className="text-gray-600 mb-8 max-w-3xl">Explore top-ranked government and private colleges across India. Find programs, locations, and rankings to help you make informed decisions about your higher education journey.</p>
 
