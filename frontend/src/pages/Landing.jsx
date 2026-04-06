@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import SEO from '../components/SEO';
 
 export default function Landing() {
   const [openFaq, setOpenFaq] = useState(null);
@@ -12,6 +13,11 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen flex flex-col bg-linear-to-b from-indigo-50 via-white to-indigo-50 text-gray-900">
+      <SEO 
+        title="Sahayak | Shape Your Educational Future"
+        description="Sahayak is India's premier educational guidance platform. Take career assessments, explore top colleges, and access free resources."
+        url="https://sahayak.live/"
+      />
       {/* Top navigation */}
       <nav className="z-30 sticky top-0 bg-white/80 backdrop-blur-md border-b">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Bar, Pie, Line } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import { questionBanks } from '../data/assessmentQuestions';
+import SEO from '../components/SEO';
 
 const QUIZ_TIME_LIMIT = 50 * 60; // 50 minutes in seconds
 
@@ -18,6 +19,14 @@ export default function Assessment() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showFullscreenWarning, setShowFullscreenWarning] = useState(false);
   const quizContainerRef = useRef(null);
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col p-4 md:p-8">
+      <SEO 
+        title="Career Assessment & Aptitude Test - Sahayak"
+        description="Take the Sahayak Career Assessment test. Discover your strengths, analyze your aptitude, and get personalized recommendations for your academic journey."
+        url="https://sahayak.live/assessment"
+      />
   const timerIntervalRef = useRef(null);
   const [attempts, setAttempts] = useState([]);
   const [warnings, setWarnings] = useState(0);

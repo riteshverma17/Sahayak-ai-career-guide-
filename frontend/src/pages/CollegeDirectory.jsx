@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { colleges } from '../data/collegesData.js';
+import SEO from '../components/SEO';
 
 const STREAM_CATEGORIES = ["All", "Engineering", "Medical", "Management", "Science/Arts", "Law"];
 const INST_TYPES = ["All", "Government", "Private", "Deemed"];
@@ -17,6 +18,16 @@ export default function CollegeDirectory() {
       const matchesName = Boolean(c.name && c.name.toLowerCase().includes(term));
       const matchesLocation = Boolean(c.location && c.location.toLowerCase().includes(term));
       const matchesProgram = Boolean(c.programs && c.programs.some(p => p.toLowerCase().includes(term)));
+    });
+  }, [searchTerm, selectedCategory, selectedType]);
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col p-4 md:p-8">
+      <SEO 
+        title="College Directory & Rankings Toolkit - Sahayak"
+        description="Search through India's top Engineering, Medical, Management, and Arts universities. View placement data, fees structures, and reviews on Sahayak."
+        url="https://sahayak.live/college-directory"
+      />
 
       const textMatch = matchesName || matchesLocation || matchesProgram;       
 
