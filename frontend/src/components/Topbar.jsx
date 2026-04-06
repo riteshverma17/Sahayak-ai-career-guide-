@@ -1,13 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { HiOutlineBell, HiOutlineLogout, HiOutlineChevronDown, HiOutlineUser } from 'react-icons/hi';
-import { useNavigate, Link } from 'react-router-dom';
+import { HiOutlineBell, HiOutlineLogout, HiOutlineChevronDown, HiOutlineUser, HiOutlineMenu, HiX, HiOutlineHome, HiOutlineBookOpen, HiOutlineSparkles, HiOutlineLibrary } from 'react-icons/hi';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 export default function Topbar(){
   const navigate = useNavigate();
+  const location = useLocation();
   const storedName = localStorage.getItem('userName') || 'User';
   const [userName, setUserName] = useState(storedName);
   const userInitials = (userName || 'User').split(' ').map(n => n[0]).join('').toUpperCase() || 'U';
   const [open, setOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const ref = useRef(null);
 
   const handleLogout = async () => {
@@ -33,13 +35,30 @@ export default function Topbar(){
     return () => document.removeEventListener('click', onDoc);
   }, []);
 
+  const isActive = (path) => location.pathname === path;
+
+  const menuItems = [
+    { label: 'Dashboard', icon: HiOutlineHome, path: '/dashboard' },
+    { label: 'Assignments', icon: HiOutlineBookOpen, path: '/assessment' },
+    { label: 'Resources', icon: HiOutlineSparkles, path: '/resources' },
+    { label: 'Colleges', icon: HiOutlineLibrary, path: '/college-directory' },
+    { label: 'Profile', icon: HiOutlineUser, path: '/profile' },
+  ];
+
   return (
-    <header className="shrink-0 sticky top-0 z-40 w-full bg-linear-to-r from-gray-900 via-indigo-900 to-black text-white shadow-md p-3 md:p-4 flex items-center justify-between">
-      <div className="flex items-center gap-4">
-        <div className="hidden md:flex items-center gap-3">
-          
+    <>
+      <header className="shrink-0 sticky top-0 z-40 w-full bg-linear-to-r from-gray-900 via-indigo-900 to-black text-white shadow-md p-3 md:p-4 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <button 
+            className="md:hidden p-2 bg-white/10 rounded-md hover:bg-white/20 transition-colors"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <HiX size={24} /> : <HiOutlineMenu size={24} />}
+          </button>
+          <div className="hidden md:flex items-center gap-3">
+            
+          </div>
         </div>
-      </div>
 
       <div className="flex items-center gap-4">
         
@@ -68,6 +87,52 @@ export default function Topbar(){
           )}
         </div>
       </div>
-    </header>
+     </header>
+
+      {/* Mobile Nav Overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-30 pt-16 bg-gray-900/90 backdrop-blur-sm md:hidden" onClick={() => setMobileMenuOpen(false)}>
+          <div 
+            className="w-64 h-full bg-linear-to-b from-gray-900 to-indigo-950 p-5 shadow-2xl flex flex-col"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-3 mb-6 pb-6 border-b border-gray-800">
+              <div className="w-10 h-10 rounded-lg bg-linear-to-tr from-indigo-600 to-pink-500 text-white flex items-center justify-center font-bold shadow-lg">S</div>
+              <div>
+                <div className="font-bold text-lg text-white">Sahayak</div>
+                <div className="text-xs text-gray-400">Career Guide</div>
+              </div>
+            </div>
+            
+            <nav className="flex flex-col gap-2">
+              {menuItems.map((item, idx) => {
+                const active = isActive(item.path);
+                return (
+                  <Link
+                    key={idx}
+                    to={item.path}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors ${
+                      active ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-white/10'
+                    }`}
+                  >
+                    <item.icon size={22} className={active ? 'text-white' : 'text-gray-400'} />
+                    <span className="font-medium">{item.label}</span>
+                  </Link>
+                );
+              })}
+              
+              <button 
+                onClick={() => { setMobileMenuOpen(false); handleLogout(); }}
+                className="flex items-center gap-4 px-4 py-3 rounded-lg mt-4 text-rose-400 hover:bg-rose-500/10 transition-colors"
+               >
+                <HiOutlineLogout size={22} />
+                <span className="font-medium">Logout</span>
+              </button>
+            </nav>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
